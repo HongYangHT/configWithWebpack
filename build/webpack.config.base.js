@@ -1,5 +1,7 @@
 import path from 'path';
 import * as config from '../config/baseConfig';
+import webpack from 'webpack';
+import * as FriendlyErrorsPlugin from 'friendly-errors-webpack-plugin';
 /**
  * config doc https://webpack.js.org/concepts/ 
  * chunkhash: http://www.cnblogs.com/ihardcoder/p/5623411.html
@@ -30,6 +32,8 @@ module.exports = {
 		}]
 	},
 	plugins: [
-		new webpack.optimize.UglifyJsPlugin()
+		new webpack.optimize.UglifyJsPlugin(),
+		new webpack.NoEmitOnErrorsPlugin(),
+		new FriendlyErrorsPlugin()
 	]
 };
