@@ -1,7 +1,7 @@
-import path from 'path';
-import * as config from '../config/baseConfig';
-import webpack from 'webpack';
-import * as FriendlyErrorsPlugin from 'friendly-errors-webpack-plugin';
+var path = require('path');
+var config = require('../config/baseConfig.js');
+var webpack = require('webpack');
+var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 /**
  * config doc https://webpack.js.org/concepts/ 
  * chunkhash: http://www.cnblogs.com/ihardcoder/p/5623411.html
@@ -9,27 +9,29 @@ import * as FriendlyErrorsPlugin from 'friendly-errors-webpack-plugin';
  */
 module.exports = {
 	entry: {
-		main: config.build.sourceRoot + 'app.js'
+		main: path.resolve(config.build.sourceRoot +'/app.js')
 	},
 	output: {
-		path: config.build.distRoot,
+		path: path.resolve(config.build.distRoot + '/app'),
 		publicPath: config.build.publicPath,
 		filename: '[name][hash:8].js',
 		chunkFilename: '[id][chunkhash:8].js'
 	},
 	resolve: {
-		extensions: ['', '.js', '.vue', '.json']
+		extensions: ['.js', '.vue', '.json']
 	},
-	modules: {
-		rules: [{
-			test: /\.vue$/,
-			use: [{
-				loader: 'vue-loader',
-				options: {
-
-				}
-			}]
-		}]
+	module: {
+		loaders: [
+            {
+                test: /\.vue$/, 
+                loader: 'vue-loader'   
+            },
+            {
+                test: /\.js$/,
+                loader: 'babel-loader?presets=es2015',
+                exclude: /node_modules/
+            }
+        ]
 	},
 	plugins: [
 		new webpack.optimize.UglifyJsPlugin(),

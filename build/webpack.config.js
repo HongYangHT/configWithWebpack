@@ -1,19 +1,23 @@
-import * as webpackBase from './webpack.config.base.js';
-import * as production from '../config/product.config.js';
-import * as webpackMerge from 'webpack-merge';
-import webpack from 'webpack';
-import path from 'path';
-import * as HtmlWebpackPlugin from 'html-webpack-plugin';
+var path = require('path');
+var config = require('../config/baseConfig.js');
+var webpack = require('webpack');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var webpackMerge = require('webpack-merge');
+var production = require('../config/product.config.js');
+var webpackBase = require('./webpack.config.base.js');
 
-
-const env = process.env.NODE_ENV;
-
-if(env == webpackBase.build.env){
+var env = process.env.NODE_ENV;
+console.log(env);
+if(env == config.build.env){
 	module.exports = webpackMerge(webpackBase,{
+		output:{
+			path: path.resolve(config.build.distRoot + '/app'),
+			publicPath: config.build.publicPath
+		},
 		plugins:[
 			new HtmlWebpackPlugin({
-				filename: config.build.distRoot + 'index.html',
-				template: config.build.distRoot + 'index.html',
+				filename: path.resolve(config.build.distRoot + '/index.html'),
+				template: path.resolve(config.build.sourceRoot + '/index.html'),
 				inject: true,
 				hash: true
 			})
@@ -22,11 +26,15 @@ if(env == webpackBase.build.env){
 }else{
 	module.exports = webpackMerge(webpackBase,{
 		devtool: '#cheap-module-eval-source-map',
+		output:{
+			path: path.resolve(config.dev.distRoot + '/app'),
+			publicPath: config.dev.publicPath
+		},
 		plugins:[
 			new webpack.HotModuleReplacementPlugin(),
 			new HtmlWebpackPlugin({
-				filename: config.dev.distRoot + 'index.html',
-				template: config.dev.distRoot + 'index.html',
+				filename: path.resolve(config.dev.distRoot + '/index.html'),
+				template: path.resolve(config.dev.sourceRoot + '/index.html'),
 				inject: true,
 				hash: true
 			})

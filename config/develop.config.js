@@ -1,5 +1,5 @@
-import * as production from './product.config';
+var production = require('./product.config.js');
 
 module.exports = Object.assign(production, {
-	NODE_ENV: 'develop'
+	NODE_ENV: 'development'
 });
